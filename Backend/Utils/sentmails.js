@@ -1,36 +1,35 @@
-import nodemailer from 'nodemailer'
-import dotenv from 'dotenv'
+import nodemailer from 'nodemailer';
 
-dotenv.config()
+import dotenv from 'dotenv';
 
+dotenv.config();
 const transporter = nodemailer.createTransport({
-    service:'gmail',
-    auth:{
-        user:process.env.EMAIL_USER,
-        pass:process.env.EMAIL_PASSWORD
-    },
-    tls: {
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER, 
+    pass: process.env.EMAIL_PASSWORD  
+  },
+  tls: {
     rejectUnauthorized: false // Allows self-signed certificates
   }
-})
+});
+console.log("credential checking",process.env.EMAIL_USER)
+console.log("credential checking",process.env.EMAIL_PASSWORD)
 
-const sendOtp = (email,otp)=>{
+
+export const sendOtp = async (email, otp) => {
   const mailOptions = {
     from: process.env.EMAIL_USER,
-    to:email,
-    subject:'Email for Authentication OTP',
-    text:`Your OTP for authentication is ${otp}`
+    to: email,
+    subject: 'Your OTP Code',
+    text: `Your OTP code is: ${otp}`
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log('OTP email sent successfully');
+  } catch (error) {
+    console.error('Error sending OTP email:', error);
+    throw new Error('Failed to send OTP email');
   }
-   try{
-      transporter.sendMail(mailOptions)
-     console.log("Email Send Sucessfully")
-   }catch(err){
-
-    console.log('Error in Email',err);
-    throw new Error('Something went wrong in Email sent')
-
-   }
-
-}
-
-export default sendOtp ;
+};

@@ -1,6 +1,6 @@
 import userModel from "../model/user.js";
 import crypto from 'crypto';
-import sendOtp from '../Utils/sentmails.js'
+import {sendOtp} from '../Utils/sentmails.js'
 
 const register = async (req,res)=>{
      console.log('Requesting data',req.body)
